@@ -1,0 +1,37 @@
+{
+"version":1,
+"name":"Geometry example",
+"build_commands": {
+	"CompileC++" : {
+		"action":"compile",
+		"args":["-fms-extensions", "-fms-compatibility", "-x", "c++", "-std=c++14", "-w"],
+		"sys_include_dir":["ucrt", "msvc"],
+		"include_dir":["include"]
+	},
+	"MakeExe" : {
+		"action":"link",
+		"args":["/defaultlib:msvcrt.lib", "/subsystem:Console"],
+		"sys_lib_dir":["msvc", "winsdk"]
+	},
+	"InterpretCC++" : {
+		"action":"interpret",
+		"args":["-x", "c++", "-std=c++14", "-D", "_DEVMAX_INTERPRETER_"],
+		"unused_args":["-fms-compatibility-version=19.10.25017", "-fdelayed-template-parsing","-fcxx-exceptions","-fexceptions"],
+		"sys_include_dir":["ucrt", "msvc"],
+		"include_dir":["include"]
+	}
+},
+"build_definitions": [
+	{
+		"name":"Generate Figure",
+		"build_steps": [
+			{
+				"command":"InterpretCC++",
+				"inputs":["GenFigure1.cpp"],
+				"inputs1":["GenFigure2.cpp"],
+				"comment":"Simply swap inputs <-> inputs1 to easily switch figure program."
+			}
+		]
+	}
+]
+}
