@@ -27,6 +27,8 @@ int main(int argc, const char **argv)
 	// Write out the figure to SVG file
 	char output_file_name[1024];
 	sprintf(output_file_name, "%s.svg", __FILE__);
+
+	printf("Render to %s\n", output_file_name);
 	fig.RenderAsSVG(600, 400, -2, 4, -2, 2, output_file_name);
 	PrintString("Done\n");
 

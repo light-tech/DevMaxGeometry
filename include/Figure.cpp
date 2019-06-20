@@ -68,8 +68,10 @@ void Figure<R>::RenderAsSVG(int width, int height, R x_min, R x_max, R y_min, R 
 	WorldToViewTransform<R> T(width, height, x_min, x_max, y_min, y_max);
 
 	fputs("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>", file);
-	fprintf(file, "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"%d\" height=\"%d\">", width, height);
-	components.ForEach([&T, file](Component *C)
+	char temp[1024];
+	sprintf(temp, "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"%d\" height=\"%d\">", width, height);
+	fputs(temp, file);
+	components.ForEach([&](Component *C)
 	{
 		switch (C->type)
 		{
@@ -80,7 +82,8 @@ void Figure<R>::RenderAsSVG(int width, int height, R x_min, R x_max, R y_min, R 
 				Point *P = (Point*) C;
 				R X, Y;
 				T.Transform(P, X, Y);
-				fprintf(file, "<text x=\"%lf\" y=\"%lf\">%s</text>", X, Y, C->label);
+				sprintf(temp, "<text x=\"%lf\" y=\"%lf\">%s</text>", X, Y, C->label);
+				fputs(temp, file);
 			}
 		}
 			break;
@@ -90,9 +93,11 @@ void Figure<R>::RenderAsSVG(int width, int height, R x_min, R x_max, R y_min, R 
 			LineSegment *L = (LineSegment*) C;
 			R X, Y;
 			T.Transform(L->endpoints[0], X, Y);
-			fprintf(file, "<line stroke=\"black\" stroke-width=\"2\" x1=\"%f\" y1=\"%f\" ", X, Y);
+			sprintf(temp, "<line stroke=\"black\" stroke-width=\"2\" x1=\"%f\" y1=\"%f\" ", X, Y);
+			fputs(temp, file);
 			T.Transform(L->endpoints[1], X, Y);
-			fprintf(file, "x2=\"%f\" y2=\"%f\" />", X, Y);
+			sprintf(temp, "x2=\"%f\" y2=\"%f\" />", X, Y);
+			fputs(temp, file);
 		}
 			break;
 
@@ -113,11 +118,12 @@ void Figure<R>::RenderAsSVG(int width, int height, R x_min, R x_max, R y_min, R 
 				fputs("<polygon fill=\"none\" stroke=\"black\" stroke-width=\"2\" points=\"", file);
 			else
 				fputs("<polyline fill=\"none\" stroke=\"black\" stroke-width=\"2\" points=\"", file);
-			P->vertices.ForEach([&T, file](G2D::Point<R> *V)
+			P->vertices.ForEach([&](G2D::Point<R> *V)
 			{
 				R X, Y;
 				T.Transform(V, X, Y);
-				fprintf(file, "%f,%f ", X, Y);
+				sprintf(temp, "%f,%f ", X, Y);
+				fputs(temp, file);
 			});
 			fputs("\" />", file);
 		}

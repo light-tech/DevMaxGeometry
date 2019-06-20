@@ -28,9 +28,9 @@ namespace G2D
 			this->v[1] = y;
 		}
 
-		Vector<R, 2> VectorTo(Point<R> &point)
+		LA::Vector<R, 2> VectorTo(Point<R> &point)
 		{
-			Vector<R, 2> result;
+			LA::Vector<R, 2> result;
 			for(int i = 0; i < 2; i++)
 				result.v[i] = point.Get(i) - this->Get(i);
 
